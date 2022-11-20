@@ -30,12 +30,13 @@ func createMux() *echo.Echo {
 
 func articleIndex(c echo.Context) error {
 	data := map[string]interface{}{
-		"Message": "Hello, World!",
+		"Message": "goooooooooo blog",
 		"Now":     time.Now(),
 	}
 	return render(c, "article/index.html", data)
 }
 
+// テンプレートの情報をバイトにして返す
 func htmlBlob(file string, data map[string]interface{}) ([]byte, error) {
 	return pongo2.Must(pongo2.FromCache(tmplPath + file)).ExecuteBytes(data)
 }
