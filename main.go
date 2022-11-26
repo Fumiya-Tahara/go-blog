@@ -1,11 +1,14 @@
 package main
 
 import (
+	"database/sql"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
 
 	"github.com/flosch/pongo2"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -33,6 +36,27 @@ func createMux() *echo.Echo {
 	e.Static("/js", "src/js")
 
 	return e
+}
+
+func connectDB() {
+	dbconf := "test"
+
+	db, err := sql.Open("mysql", dbconf)
+
+	defer db.Close()
+
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	err = db.Ping()
+
+	if err != nil {
+		log.Println("データベース接続失敗")
+		return
+	} else {
+		log.Println("データベース接続成功")
+	}
 }
 
 func articleIndex(c echo.Context) error {
