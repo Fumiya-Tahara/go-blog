@@ -4,11 +4,13 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
 	"github.com/flosch/pongo2"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -18,6 +20,8 @@ const tmplPath = "src/template/"
 var e = createMux()
 
 func main() {
+	connectDB()
+
 	e.GET("/", articleIndex)
 	e.GET("/new", articleNew)
 	e.GET("/:id", articleShow)
@@ -39,7 +43,11 @@ func createMux() *echo.Echo {
 }
 
 func connectDB() {
-	dbconf := "test"
+	err := godotenv.Load(".env")
+	if err != nil {
+		panic("Error loading .env file")
+	}
+	dbconf := os.Getenv("DSN")
 
 	db, err := sql.Open("mysql", dbconf)
 
