@@ -49,22 +49,19 @@ func connectDB() {
 	}
 	dbconf := os.Getenv("DSN")
 
-	db, err := sql.Open("mysql", dbconf)
-
+	db, _ := sql.Open("mysql", dbconf)
 	defer db.Close()
+	cmd := `select * from articles;`
 
 	if err != nil {
-		log.Println(err.Error())
+		e.Logger.Fatal(err)
 	}
+	// if err := db.Ping(); err != nil {
+	// 	e.Logger.Fatal(err)
+	// }
 
-	err = db.Ping()
+	log.Println("db connection succeeded")
 
-	if err != nil {
-		log.Println("データベース接続失敗")
-		return
-	} else {
-		log.Println("データベース接続成功")
-	}
 }
 
 func articleIndex(c echo.Context) error {
