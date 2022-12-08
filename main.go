@@ -51,7 +51,7 @@ func connectDB() {
 
 	db, _ := sql.Open("mysql", dbconf)
 	defer db.Close()
-	cmd := `select * from articles;`
+	// cmd := `select * from articles;`
 
 	if err != nil {
 		e.Logger.Fatal(err)
