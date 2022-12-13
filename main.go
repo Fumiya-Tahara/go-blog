@@ -43,22 +43,19 @@ func createMux() *echo.Echo {
 }
 
 func connectDB() {
-	err := godotenv.Load(".env")
-	if err != nil {
+	// 環境変数からDSN取ってくる
+	if err := godotenv.Load(".env"); err != nil {
 		panic("Error loading .env file")
 	}
 	dbconf := os.Getenv("DSN")
 
 	db, _ := sql.Open("mysql", dbconf)
 	defer db.Close()
-	// cmd := `select * from articles;`
 
-	if err != nil {
+	// データベース接続の確認
+	if err := db.Ping(); err != nil {
 		e.Logger.Fatal(err)
 	}
-	// if err := db.Ping(); err != nil {
-	// 	e.Logger.Fatal(err)
-	// }
 
 	log.Println("db connection succeeded")
 
